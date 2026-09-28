@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Disallow: /js/
+Disallow: /css/
+
+Sitemap: https://cyberpath.app/sitemap.xml

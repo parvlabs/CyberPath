@@ -1,0 +1,22 @@
+# Operating System files
+Thumbs.db
+.DS_Store
+
+# Editor & IDE settings
+.vscode/
+.cursor/
+.idea/
+
+# Agent & AI skills
+.agents/
+.mcp.json
+
+# Node / Python / Temp caches
+node_modules/
+__pycache__/
+*.pyc
+*.log
+
+# Sensitive credentials
+.env
+.env.local

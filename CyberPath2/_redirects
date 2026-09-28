@@ -1,0 +1,6 @@
+# Firebase Google OAuth callback
+/__/auth/*  https://:project.firebaseapp.com/__/auth/:splat  200
+
+# SPA routing
+/auth       /auth.html    200
+/*          /index.html   200

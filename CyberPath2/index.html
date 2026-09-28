@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberPath — AI-Powered Cybersecurity Learning & Career Platform</title>
+  <meta name="description"
+    content="CyberPath — AI career guidance, personalized roadmaps, quizzes, build lab, and curated resources for cybersecurity practitioners.">
+  <meta name="keywords"
+    content="cybersecurity,SOC analyst,penetration testing,career roadmap,cybersecurity courses,threat intelligence">
+  <meta name="theme-color" content="#080A0F">
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563EB'><path d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+
+  <!-- Static utility containers required by JS (created once so getElementById never returns null) -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="particles" id="particles"></div>
+  <div id="cpToast" class="cv-toast" style="position:fixed;top:80px;right:20px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 18px;z-index:9999;display:none;"></div>
+  <div id="cvToast" style="display:none;"></div>
+
+  <div class="app-layout" id="appLayout">
+
+    <!-- ════ LEFT SIDEBAR ════ -->
+    <aside class="app-sidebar" id="appSidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo" onclick="navigate('dashboard')">
+          <div class="brand-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.18l7 3.12v4.7c0 4.67-3.13 9.07-7 10.18-3.87-1.11-7-5.51-7-10.18V6.3l7-3.12z" />
+            </svg>
+          </div>
+          <span class="brand-text">CyberPath</span>
+          <span class="brand-tag">v2.0</span>
+        </div>
+        <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="toggleSidebar()" title="Collapse sidebar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="sidebar-scroll">
+        <!-- Group: Overview -->
+        <div class="sidebar-nav-group">
+          <div class="nav-group-title">Overview</div>
+          <ul class="sidebar-nav-list" id="navLinks">
+            <li>
+              <a href="#" class="nav-link-item active" data-page="dashboard">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                </span>
+                <span class="nav-item-label">Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link-item" data-page="dna">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 1a4 4 0 0 0-4 4v14a4 4 0 0 0 4 4M14 1a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4"/><path d="M4 15h16M4 11h16M4 7h16M4 19h16"/></svg>
+                </span>
+                <span class="nav-item-label">Cyber DNA</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Group: Learning -->
+        <div class="sidebar-nav-group">
+          <div class="nav-group-title">Learning</div>
+          <ul class="sidebar-nav-list">
+            <li>
+              <a href="#" class="nav-link-item" data-page="advisor">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="2" y="8" width="20" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg>
+                </span>
+                <span class="nav-item-label">AI Advisor</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link-item" data-page="learningPlan">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M19 9l-5 5-4-4-3 3"/></svg>
+                </span>
+                <span class="nav-item-label">AI Learning Plan</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Group: Resources -->
+        <div class="sidebar-nav-group">
+          <div class="nav-group-title">Resources</div>
+          <ul class="sidebar-nav-list">
+            <li>
+              <a href="#" class="nav-link-item" data-page="resources">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </span>
+                <span class="nav-item-label">Resource Finder</span>
+                <span class="nav-item-badge">500+</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Group: Practice -->
+        <div class="sidebar-nav-group">
+          <div class="nav-group-title">Practice</div>
+          <ul class="sidebar-nav-list">
+            <li>
+              <a href="#" class="nav-link-item" data-page="quiz">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                </span>
+                <span class="nav-item-label">Practice / Quiz</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link-item" data-page="projects">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                </span>
+                <span class="nav-item-label">Projects / Build Lab</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Group: Career -->
+        <div class="sidebar-nav-group">
+          <div class="nav-group-title">Career</div>
+          <ul class="sidebar-nav-list">
+            <li>
+              <a href="#" class="nav-link-item" data-page="careers">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M9 5v2M15 5v2"/></svg>
+                </span>
+                <span class="nav-item-label">Career Hub</span>
+                <span class="nav-item-badge">9</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link-item" data-page="skillgap">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 2"/></svg>
+                </span>
+                <span class="nav-item-label">Skill Gap Analysis</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Group: Intelligence -->
+        <div class="sidebar-nav-group">
+          <div class="nav-group-title">Threat Intelligence</div>
+          <ul class="sidebar-nav-list">
+            <li>
+              <a href="#" class="nav-link-item" data-page="news">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+                </span>
+                <span class="nav-item-label">Threat Intelligence</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link-item" data-page="analytics">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3-3 4 4 5-6"/></svg>
+                </span>
+                <span class="nav-item-label">Analytics</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link-item" data-page="admin">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </span>
+                <span class="nav-item-label">Admin CMS</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Sidebar Bottom Section -->
+      <div class="sidebar-bottom">
+        <div class="sidebar-nav-group sidebar-bottom-group">
+          <ul class="sidebar-nav-list">
+            <li>
+              <a href="#" class="nav-link-item" data-page="profile">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </span>
+                <span class="nav-item-label">Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link-item" data-page="settings">
+                <span class="nav-item-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                </span>
+                <span class="nav-item-label">Settings</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Sidebar User Footer -->
+        <div class="sidebar-footer">
+          <div class="sidebar-user" id="navUser" onclick="navigate('profile')">
+            <div class="user-avatar" id="navUserAva">U</div>
+            <div class="user-meta">
+              <span class="user-name" id="navUserName">Security Practitioner</span>
+              <span class="user-role" id="navUserRole">Member</span>
+            </div>
+          </div>
+          <button class="btn-sidebar-logout" onclick="handleLogout()" title="Sign out">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- ════ MAIN WRAPPER ════ -->
+    <div class="app-main-wrap" id="appMainWrap">
+
+      <!-- ════ TOP HEADER ════ -->
+      <header class="app-header" id="mainNav">
+        <div class="header-left">
+          <button class="mobile-nav-toggle" id="menuBtn" onclick="toggleMobileMenu()" title="Open menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="header-search">
+            <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="globalSearchInput" class="header-search-input"
+              placeholder="Search roadmaps, tools, CVEs, careers..." oninput="handleGlobalSearch(this.value)">
+            <span class="search-shortcut">⌘K</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+
+        <!-- Notification Trigger -->
+        <div class="notif-bell-wrap" id="notifBell" onclick="toggleNotifPanel()">
+          <button class="notif-bell-btn" title="Notifications">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <span class="notif-badge" id="notifBadge">0</span>
+          </button>
+        </div>
+
+        <!-- Language Switcher -->
+        <div class="header-lang-switcher">
+          <button class="lang-btn active" id="langEn" onclick="I18N.set('en')" title="English">EN</button>
+          <button class="lang-btn" id="langHi" onclick="I18N.set('hi')" title="हिन्दी">हि</button>
+        </div>
+
+          <!-- User Quick Profile -->
+          <div class="header-dropdown">
+            <div class="user-avatar header-user-avatar" id="headerUserAva" onclick="toggleUserMenu()"
+              style="cursor:pointer;">
+              U
+            </div>
+            <div class="user-dropdown-menu" id="userDropdownMenu">
+              <div class="user-dropdown-header" onclick="navigate('profile')">
+                <div class="user-avatar" id="userDropdownAva" style="width:40px;height:40px;font-size:0.95rem">U</div>
+                <div class="user-meta">
+                  <span class="user-name" id="userDropdownName">User</span>
+                  <span class="user-role" id="userDropdownEmail">email</span>
+                </div>
+              </div>
+              <div class="user-dropdown-divider"></div>
+              <a href="#" class="user-dropdown-item" onclick="navigate('profile');closeUserMenu()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Profile
+              </a>
+              <a href="#" class="user-dropdown-item" onclick="navigate('settings');closeUserMenu()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v1M12 21v1M4.22 4.22l.77.77M19.01 19.01l.77.77M2 12h1M21 12h1M4.22 19.78l.77-.77M19.01 4.99l.77-.77"/></svg>
+                Settings
+              </a>
+              <div class="user-dropdown-divider"></div>
+              <a href="#" class="user-dropdown-item user-dropdown-danger" onclick="handleLogout()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Sign Out
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ════ NOTIFICATION CENTER DROPDOWN ════ -->
+      <div class="notif-panel" id="notifPanel"></div>
+
+      <!-- ════ PAGE: DASHBOARD (OVERVIEW) ════ -->
+      <div class="page active" id="page-dashboard">
+        <div id="dashboardBody"></div>
+      </div>
+
+      <!-- ════ PAGE: AI ADVISOR ════ -->
+      <div class="page" id="page-advisor">
+        <div class="page-hero">
+          <div class="section-tag">AI CAREER MENTOR</div>
+          <h1 class="page-title">AI Advisor</h1>
+          <p class="page-sub">Personalized guidance, customized roadmaps, and career direction for cybersecurity practitioners.</p>
+        </div>
+        <div class="page-body" id="aiAdvisorBody"></div>
+      </div>
+
+      <!-- ════ PAGE: AI LEARNING PLAN ════ -->
+      <div class="page" id="page-learningPlan">
+        <div class="page-hero">
+          <div class="section-tag">PERSONALIZED ROADMAP</div>
+          <h1 class="page-title">AI Learning Plan</h1>
+          <p class="page-sub">Your customized learning roadmap, generated by AI based on your goals, skill gaps, and career target.</p>
+        </div>
+        <div class="page-body" id="learningPlanBody"></div>
+      </div>
+
+      <!-- ════ PAGE: CYBER DNA ════ -->
+      <div class="page" id="page-dna">
+        <div class="page-hero">
+          <div class="section-tag">SKILL VISUALIZATION</div>
+          <h1 class="page-title">Cyber DNA</h1>
+          <p class="page-sub">A complete visual map of your cybersecurity skill profile — strengths, gaps, and growth trajectory.</p>
+        </div>
+        <div class="page-body" id="dnaBody"></div>
+      </div>
+
+      <!-- ════ PAGE: CAREERS ════ -->
+      <div class="page" id="page-careers">
+        <div class="page-hero">
+          <div class="section-tag">CAREER PATHWAYS</div>
+          <h1 class="page-title">Cybersecurity Career Tracks</h1>
+          <p class="page-sub">9 structured enterprise career paths with phase-by-phase roadmaps, recommended tooling, certifications, and portfolio projects.</p>
+        </div>
+        <div class="page-body" id="careerHubBody"></div>
+      </div>
+
+      <!-- ════ PAGE: SKILL GAP ANALYSIS ════ -->
+      <div class="page" id="page-skillgap">
+        <div class="page-hero">
+          <div class="section-tag">GAP ANALYSIS</div>
+          <h1 class="page-title">Skill Gap Analysis</h1>
+          <p class="page-sub">Identify skill gaps between your current Cyber DNA and target career role, then bridge them with a precise learning roadmap.</p>
+        </div>
+        <div class="page-body" id="skillgapBody"></div>
+      </div>
+
+      <!-- ════ PAGE: RESOURCE FINDER ════ -->
+      <div class="page" id="page-resources">
+        <div class="page-hero">
+          <div class="section-tag">TOOL DIRECTORY</div>
+          <h1 class="page-title">Security & AI Resource Library</h1>
+          <p class="page-sub">30+ curated security utilities, penetration testing frameworks, and developer tools — smart recommendations based on your quiz performance.</p>
+        </div>
+        <div class="page-body" id="resourcesBody"></div>
+      </div>
+
+      <!-- ════ PAGE: BUILD LAB (PROJECT GENERATOR) ════ -->
+      <div class="page" id="page-projects">
+        <div class="page-hero">
+          <div class="section-tag">PROJECT BLUEPRINTS</div>
+          <h1 class="page-title">Build Lab</h1>
+          <p class="page-sub">Generate practical, portfolio-ready cybersecurity project architectures tailored to your skill level and domain.</p>
+        </div>
+        <div class="page-body" id="projectGenBody"></div>
+      </div>
+
+      <!-- ════ PAGE: PRACTICE CENTER (QUIZ) ════ -->
+      <div class="page" id="page-quiz">
+        <div class="page-hero">
+          <div class="section-tag">SKILL ASSESSMENT</div>
+          <h1 class="page-title">Practice Center</h1>
+          <p class="page-sub">Evaluate your knowledge across 8 cybersecurity domains, pinpoint skill gaps, and earn validation scores.</p>
+        </div>
+        <div class="page-body" id="quizBody"></div>
+      </div>
+
+      <!-- ════ PAGE: THREAT INTELLIGENCE (NEWS) ════ -->
+      <div class="page" id="page-news">
+        <div class="page-hero">
+          <div class="section-tag">THREAT FEED</div>
+          <h1 class="page-title">Threat Intelligence</h1>
+          <p class="page-sub">Live intelligence briefings, active CVE disclosures, malware strain analyses, and breach telemetry.</p>
+        </div>
+        <div class="news-controls">
+          <div class="news-cat-bar" id="newsCatBar"></div>
+        </div>
+        <div class="news-layout" id="newsLayout"></div>
+      </div>
+
+      <!-- ════ PAGE: ANALYTICS ════ -->
+      <div class="page" id="page-analytics">
+        <div class="page-hero">
+          <div class="section-tag">METRICS & TELEMETRY</div>
+          <h1 class="page-title">Activity Stats & Security Telemetry</h1>
+          <p class="page-sub">Comprehensive telemetry on your scans, practice history, and skill development metrics.</p>
+        </div>
+        <div class="page-body" id="analyticsBody"></div>
+      </div>
+
+      <!-- ════ PAGE: ADMIN ════ -->
+      <div class="page" id="page-admin">
+        <div class="page-hero">
+          <div class="section-tag">PLATFORM ADMINISTRATION</div>
+          <h1 class="page-title">Admin Dashboard</h1>
+          <p class="page-sub">Manage platform content, learning resources, threat bulletins, and member access.</p>
+        </div>
+        <div class="page-body" id="adminBody"></div>
+      </div>
+
+      <!-- ════ PAGE: PROFILE ════ -->
+      <div class="page" id="page-profile">
+        <div class="page-hero">
+          <div class="section-tag">ACCOUNT</div>
+          <h1 class="page-title">Profile</h1>
+          <p class="page-sub">Manage your profile information, preferences, and public CyberPath profile.</p>
+        </div>
+        <div class="page-body" id="profileBody"></div>
+      </div>
+
+      <!-- ════ PAGE: SETTINGS ════ -->
+      <div class="page" id="page-settings">
+        <div class="page-hero">
+          <div class="section-tag">PREFERENCES</div>
+          <h1 class="page-title">Settings</h1>
+          <p class="page-sub">Configure your platform preferences, notifications, and appearance settings.</p>
+        </div>
+        <div class="page-body" id="settingsBody"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ SCRIPTS ═══ -->
+  <script src="js/firebase-config.js"></script>
+  <script>
+    // Open access — auto-create a local guest user if none exists
+    (function() {
+      let user = null;
+      try { user = JSON.parse(localStorage.getItem('cv_current_user') || 'null'); } catch(e) {}
+      if (!user) {
+        const guest = {
+          uid:        'guest_' + Date.now(),
+          email:      'guest@cyberpath.local',
+          displayName:'Guest User',
+          role:       'user',
+          createdAt:  new Date().toISOString(),
+          provider:   'local'
+        };
+        localStorage.setItem('cv_current_user', JSON.stringify(guest));
+        user = guest;
+      }
+      window.CV_USER = user;
+    })();
+  </script>
+  <script src="js/i18n.js"></script>
+  <script src="js/ai-config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/resources.js"></script>
+  <script src="js/news.js"></script>
+  <script src="js/ai-advisor.js"></script>
+  <script src="js/career-hub.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/ai-quiz.js"></script>
+  <script src="js/project-gen.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/learning-plan.js"></script>
+  <script src="js/dna.js"></script>
+  <script src="js/skillgap.js"></script>
+  <script src="js/profile-settings.js"></script>
+  <script>
+    window.updateUserDropdown = function() {
+      const u = window.CV_USER;
+      if (!u) return;
+      const ddAva   = document.getElementById('userDropdownAva');
+      const ddName  = document.getElementById('userDropdownName');
+      const ddEmail = document.getElementById('userDropdownEmail');
+      const hdrAva  = document.getElementById('headerUserAva');
+      const initials = (u.displayName || u.email || 'U').charAt(0).toUpperCase();
+      if (ddAva) {
+        if (u.photoURL) ddAva.innerHTML = `<img src="${u.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`;
+        else ddAva.textContent = initials;
+      }
+      if (hdrAva) {
+        if (u.photoURL) hdrAva.innerHTML = `<img src="${u.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`;
+        else hdrAva.textContent = initials;
+      }
+      if (ddName)  ddName.textContent  = u.displayName || 'User';
+      if (ddEmail) ddEmail.textContent = u.email || '';
+    };
+
+    window.toggleUserMenu = function() {
+      document.getElementById('userDropdownMenu')?.classList.toggle('open');
+    };
+    window.closeUserMenu  = function() {
+      document.getElementById('userDropdownMenu')?.classList.remove('open');
+    };
+    // Close user dropdown on outside click
+    document.addEventListener('click', e => {
+      const m = document.getElementById('userDropdownMenu');
+      const a = document.getElementById('headerUserAva');
+      if (m && m.classList.contains('open') && !m.contains(e.target) && a && !a.contains(e.target)) {
+        m.classList.remove('open');
+      }
+    });
+
+    window.handleGlobalSearch = function(q) {
+      // Lightweight client-side search — jumps to the most relevant page
+      const v = (q || '').trim().toLowerCase();
+      if (!v) return;
+      if (/career|job|role|track/.test(v))          navigate('careers');
+      else if (/quiz|test|practice/.test(v))        navigate('quiz');
+      else if (/plan|roadmap|learn/.test(v))        navigate('learningPlan');
+      else if (/advisor|ai|guide/.test(v))           navigate('advisor');
+      else if (/project|build|lab/.test(v))         navigate('projects');
+      else if (/dna|skill/.test(v))                  navigate('dna');
+      else if (/gap/.test(v))                        navigate('skillgap');
+      else if (/news|threat|cve/.test(v))            navigate('news');
+      else if (/resource|tool|find/.test(v))         navigate('resources');
+      else if (/analytic|stat|chart/.test(v))        navigate('analytics');
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        if (window.I18N) {
+          I18N.init();
+          I18N.applyToDOM();
+          document.documentElement.lang = I18N.current;
+          const updateLangBtns = () => {
+            const en = document.getElementById('langEn');
+            const hi = document.getElementById('langHi');
+            if (en) en.classList.toggle('active', I18N.current === 'en');
+            if (hi) hi.classList.toggle('active', I18N.current === 'hi');
+          };
+          updateLangBtns();
+          const origSet = I18N.set.bind(I18N);
+          I18N.set = (lang) => { origSet(lang); updateLangBtns(); rerenderCurrentPage(); };
+        }
+        if (typeof updateNavUser === 'function')        updateNavUser();
+        if (typeof updateUserDropdown === 'function')  updateUserDropdown();
+        if (typeof seedDefaultNotifs === 'function')   seedDefaultNotifs();
+        if (typeof checkScheduledNotifs === 'function')checkScheduledNotifs();
+        if (typeof injectAdminTools === 'function')    injectAdminTools();
+        if (typeof injectAdminNews === 'function')     injectAdminNews();
+        if (typeof renderDashboard === 'function')     renderDashboard();
+        if (typeof renderDNA === 'function')           renderDNA();
+        if (typeof renderLearningPlan === 'function')  renderLearningPlan();
+        if (typeof renderSkillGap === 'function')      renderSkillGap();
+        if (typeof renderProfile === 'function')       renderProfile();
+        if (typeof renderSettings === 'function')      renderSettings();
+        if (typeof initReveal === 'function')          initReveal();
+      } catch(err) {
+        console.error('Init error:', err);
+      }
+    });
+
+    window.rerenderCurrentPage = function() {
+      const active = document.querySelector('.page.active');
+      const id = active?.id?.replace('page-', '');
+      if (!id) return;
+      const fns = {
+        'dashboard':    renderDashboard,
+        'advisor':      renderAIAdvisor,
+        'careers':      renderCareerHub,
+        'resources':    renderResources,
+        'projects':     renderProjectGen,
+        'quiz':         renderQuiz,
+        'news':         renderNews,
+        'analytics':    renderAnalytics,
+        'admin':        renderAdmin,
+        'learningPlan': renderLearningPlan,
+        'dna':          renderDNA,
+        'skillgap':     renderSkillGap,
+        'profile':      renderProfile,
+        'settings':     renderSettings
+      };
+      if (typeof fns[id] === 'function') fns[id]();
+    };
+  </script>
+</body>
+
+</html>
