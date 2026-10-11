@@ -1,5 +1,9 @@
 # 🛡️ CYBERPATH — AI-Powered Cybersecurity Learning, Assessment & Career Guidance Platform
 
+<p align="center">
+  <img src="assets/cyberpath_cover_banner.jpg" alt="CyberPath Cover Banner" width="100%" style="border-radius: 8px;" />
+</p>
+
 > **Smart India Hackathon 2026 (SIH 2026) — Problem Statement: SIH26101**  
 > *An adaptive, diagnostic, AI-driven cybersecurity workforce acceleration platform built for India.*
 
