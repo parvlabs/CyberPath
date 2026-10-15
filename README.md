@@ -7,6 +7,40 @@
 > **Smart India Hackathon 2026 (SIH 2026) — Problem Statement: SIH26101**  
 > *An adaptive, diagnostic, AI-driven cybersecurity workforce acceleration platform built for India.*
 
+<div align="center">
+
+[![SIH 2026](https://img.shields.io/badge/SIH%202026-Problem%20SIH26101-00d4ff?style=for-the-badge&logo=target)](https://github.com/parvlabs/CyberPath)
+[![Architecture](https://img.shields.io/badge/Architecture-Local--First%20SPA-10b981?style=for-the-badge)](CyberPath_SIH_Mentor_Judge_Defense_Guide.pdf)
+[![AI Engine](https://img.shields.io/badge/AI-Google%20Gemini-f59e0b?style=for-the-badge&logo=google)](CyberPath2/js/ai-config.js)
+[![Multilingual](https://img.shields.io/badge/i18n-English%20%7C%20%E0%A4%B9%E0%A4%BF%E0%A4%A8%E0%A5%8D%E0%A4%A6%E0%A5%80-a855f7?style=for-the-badge)](CyberPath2/js/i18n.js)
+
+</div>
+
+<table align="center" width="100%">
+  <tr>
+    <td width="65%" valign="top">
+      <h3>🛡️ CyberPath Repository Card</h3>
+      <p><b>An autonomous cybersecurity learning, assessment & career navigation ecosystem.</b> Transforms fragmented security education into personalized career acceleration through real-time competency diagnostics, mathematical role-gap analysis, and adaptive generative intelligence.</p>
+      <p>
+        <code>⚡ Zero-Dependency SPA</code> &bull;
+        <code>🧬 48-Skill Cyber DNA</code> &bull;
+        <code>🤖 5-Model Gemini Pool</code> &bull;
+        <code>📝 Adaptive MCQs</code> &bull;
+        <code>🇮🇳 Native English/Hindi</code>
+      </p>
+    </td>
+    <td width="35%" valign="top" align="center">
+      <h4>⚡ Quick Navigation</h4>
+      <p>
+        🌐 <a href="https://parvlabs.github.io/CyberPath/"><b>Live Web App ↗</b></a><br>
+        📑 <a href="CyberPath_SIH_Mentor_Judge_Defense_Guide.pdf"><b>Judge Defense Guide (PDF)</b></a><br>
+        📁 <a href="CyberPath2/"><b>App Source Code (14 Views)</b></a><br>
+        🤖 <a href="CyberPath2/js/ai-config.js"><b>Gemini Client Engine</b></a>
+      </p>
+    </td>
+  </tr>
+</table>
+
 ---
 
 ## 🌟 Overview
